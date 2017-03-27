@@ -82,6 +82,18 @@ int main(int argc, char** argv)
 		cipher_input += line;
 	}
 
+	// Since the AES and DES need an unsigned char
+	unsigned char* cstr = new unsigned char[cipher_input.length() + 1];
+	strcpy((char *)cstr, cipher_input.c_str());
+
+	// Do the same with the key
+	unsigned char* c_key = new unsigned char[key.length() + 1];
+	strcpy((char *)c_key, key.c_str());
+
+	// Check if we are encyrpting or decrypting
+	// Since AES needs two different types of key depending on mode
+	// We will place a 0 at end of string for encrytping
+	// and a 1 for decrypting
 	if (cipherMode == "ENC")
 	{
 		if (CipherName == "AES")
@@ -89,8 +101,10 @@ int main(int argc, char** argv)
 			key += '0';
 		}
 
-		if (!cipher->setKey(key.c_str()))
+		if (!cipher->setKey(c_key))
 			exit(1);
+
+		cipher->encrypt(cstr);
 	}
 	else if (cipherMode == "DEC")
 	{
@@ -99,8 +113,10 @@ int main(int argc, char** argv)
 			key += '1';
 		}
 
-		if(!cipher->setKey(key.c_str()))
+		if(!cipher->setKey(c_key))
 			exit(1);
+
+		cipher->decrypt(cstr);
 	}
 
 	return 0;
