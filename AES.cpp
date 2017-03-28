@@ -26,9 +26,21 @@ bool AES::setKey(const unsigned char* keyArray)
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
 
-
+	// Check if the array passed is 17 bytes long
+	if(strlen((char *) keyArray) == 17){
+		if(keyArray[0] == '0'){
+			// The first byte was a 0, use AES_set_encrypt_key(...)
+			AES_set_encrypt_key(keyArray+1, 128, &key);
+			return true;
+		}
+		else{
+			// The first byte was not 0, use AES_set_decrypt_key(...)
+			AES_set_decrypt_key(keyArray+1, 128, &key);
+			return true;
+		}
+	}
 	return false;
-
+	
 }
 
 /**

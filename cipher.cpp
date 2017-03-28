@@ -92,13 +92,13 @@ int main(int argc, char** argv)
 
 	// Check if we are encyrpting or decrypting
 	// Since AES needs two different types of key depending on mode
-	// We will place a 0 at end of string for encrytping
+	// We will place a 0 at beginning of string for encrytping
 	// and a 1 for decrypting
 	if (cipherMode == "ENC")
 	{
 		if (CipherName == "AES")
 		{
-			key += '0';
+			key = '0' + key;
 		}
 
 		if (!cipher->setKey(c_key))
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 	{
 		if (CipherName == "AES")
 		{
-			key += '1';
+			key = '1' + key;
 		}
 
 		if(!cipher->setKey(c_key))
