@@ -85,12 +85,12 @@ unsigned char* DES::encrypt(const unsigned char* plaintext)
     block[0] = ctol( (unsigned char*)plaintext);
     block[1] = ctol( (unsigned char*)plaintext + 4);
     des_encrypt1(block, key, ENC);
-    memset(cipherText,0,9);
+    memset(cipherText,0,8);
     ltoc(block[0], cipherText);
     ltoc(block[1], cipherText + 4);
 
     return cipherText;
-    
+
 }
 
 /**
