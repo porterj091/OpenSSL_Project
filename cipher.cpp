@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 
 	// Check if we are encyrpting or decrypting
 	// Since AES needs two different types of key depending on mode
-	// We will place a 0 at beginning of string for encrytping
+	// We will place a 0 at end of string for encrytping
 	// and a 1 for decrypting
 	if (cipherMode == "ENC")
 	{
