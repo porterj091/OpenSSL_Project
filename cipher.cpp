@@ -106,7 +106,6 @@ int main(int argc, char** argv)
 	else if (cipherMode == "DEC")
 	{
 
-        cout << "going to decrypt\n";
 		if (CipherName == "AES")
 		{
 			key += '1';
