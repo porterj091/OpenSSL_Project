@@ -1,6 +1,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "CipherInterface.h"
 #include "DES.h"
@@ -55,40 +57,25 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
-
-	// Handle file operations
-	ifstream fIn(inFile, ios_base::in);
-	ofstream fOut(outFile, ios_base::out);
-
-	if (!fIn)
-	{
-		cerr << "ERROR: Could not open file: " << inFile << endl;
-		exit(1);
-	}
-
-	if (!fOut)
-	{
-		cerr << "ERROR: Could not open file: " << outFile << endl;
-		exit(1);
-	}
-
-	string cipher_input;
-
-	while(fIn.good())
-	{
-		string line;
-		fIn >> line;
-
-		cipher_input += line;
-	}
-
-	// Since the AES and DES need an unsigned char
-	unsigned char* cstr = new unsigned char[cipher_input.length() + 1];
-	strcpy((char *)cstr, cipher_input.c_str());
-
-	// Do the same with the key
 	unsigned char* c_key = new unsigned char[key.length() + 1];
 	strcpy((char *)c_key, key.c_str());
+
+	FILE *input, *output;
+
+	if ((input=fopen(argv[4], "rb")) == NULL)
+	{
+		perror("FILE Input");
+		exit(-1);
+	}
+
+	if((output=fopen(argv[5], "wb")) == NULL)
+	{
+		perror("FILE Output");
+		exit(-1);
+	}
+
+	// The blockSize for DES
+	int blockSize = 8;
 
 	// Check if we are encyrpting or decrypting
 	// Since AES needs two different types of key depending on mode
@@ -96,27 +83,52 @@ int main(int argc, char** argv)
 	// and a 1 for decrypting
 	if (cipherMode == "ENC")
 	{
+		// If AES blockSize is 16 bytes
 		if (CipherName == "AES")
 		{
 			key = '0' + key;
+			blockSize = 16;
 		}
 
 		if (!cipher->setKey(c_key))
 			exit(1);
 
-		cipher->encrypt(cstr);
+		unsigned char* data = new unsigned char[blockSize];
+		int num_Bytes = 0;
+		while ((num_Bytes = fread(data, sizeof(unsigned char), blockSize, input)) > 0)
+		{
+			// Pad the block with 0 if less than blocksize
+			if (num_Bytes < blockSize)
+			{
+				for(int i = num_Bytes; i < blockSize; ++i) data[i] = 0;
+			}
+			fwrite(cipher->encrypt(data), sizeof(unsigned char), blockSize, output);
+			memset(data, 0, blockSize);
+		}
 	}
 	else if (cipherMode == "DEC")
 	{
 		if (CipherName == "AES")
 		{
 			key = '1' + key;
+			blockSize = 16;
 		}
 
 		if(!cipher->setKey(c_key))
 			exit(1);
 
-		cipher->decrypt(cstr);
+		unsigned char* data = new unsigned char[blockSize];
+		int num_Bytes = 0;
+		while ((num_Bytes = fread(data, sizeof(unsigned char), blockSize, input)) > 0)
+		{
+			// Pad the block with 0 if less than blocksize
+			if (num_Bytes < blockSize)
+			{
+				for(int i = num_Bytes; i < blockSize; ++i) data[i] = 0;
+			}
+			fwrite(cipher->decrypt(data), sizeof(unsigned char), blockSize, output);
+			memset(data, 0, blockSize);
+		}
 	}
 
 	return 0;

@@ -1,3 +1,5 @@
 *.o
 cipher
+input
+output
 *.h.gch
