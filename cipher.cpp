@@ -83,7 +83,6 @@ int main(int argc, char** argv)
 	// and a 1 for decrypting
 	if (cipherMode == "ENC")
 	{
-		// If AES blockSize is 16 bytes
 		if (CipherName == "AES")
 		{
 			key = '0' + key;
@@ -91,8 +90,9 @@ int main(int argc, char** argv)
 		}
 
 		if (!cipher->setKey(c_key))
-			exit(1);
+            exit(1);
 
+        
 		unsigned char* data = new unsigned char[blockSize];
 		int num_Bytes = 0;
 		while ((num_Bytes = fread(data, sizeof(unsigned char), blockSize, input)) > 0)
@@ -108,6 +108,8 @@ int main(int argc, char** argv)
 	}
 	else if (cipherMode == "DEC")
 	{
+
+        cout << "going to decrypt\n";
 		if (CipherName == "AES")
 		{
 			key = '1' + key;

@@ -5,6 +5,8 @@
  * @param key - the key to use
  * @return - True if the key is valid and False otherwise
  */
+#define ENC 1
+#define DEC 0
 bool DES::setKey(const unsigned char* keyArray)
 {
 	/**
@@ -78,8 +80,17 @@ unsigned char* DES::encrypt(const unsigned char* plaintext)
 	//8. Save the results in the the dynamically allocated char array
 	// (e.g. unsigned char* bytes = nerw unsigned char[8]).
 	//9. Return the pointer to the dynamically allocated array.
+    unsigned char* cipherText = new unsigned char[8];
+    DES_LONG block[2];
+    block[0] = ctol( (unsigned char*)plaintext);
+    block[1] = ctol( (unsigned char*)plaintext + 4);
+    des_encrypt1(block, key, ENC);
+    memset(cipherText,0,9);
+    ltoc(block[0], cipherText);
+    ltoc(block[1], cipherText + 4);
 
-	return NULL;
+    return cipherText;
+    
 }
 
 /**
@@ -91,7 +102,16 @@ unsigned char* DES::decrypt(const unsigned char* ciphertext)
 {
 	//LOGIC:
 	// Same logic as encrypt(), except in step 5. decrypt instead of encrypting
-	return NULL;
+    unsigned char* plaintext = new unsigned char[8];
+    DES_LONG block[2];
+    block[0] = ctol( (unsigned char*)ciphertext);
+    block[1] = ctol( (unsigned char*)ciphertext + 4);
+    des_encrypt1(block, key, DEC);
+    memset(plaintext,0,8);
+    ltoc(block[0], plaintext);
+    ltoc(block[1], plaintext + 4);
+
+    return plaintext;
 }
 
 /**

@@ -8,7 +8,8 @@
 #include <string>
 #include "CipherInterface.h"
 #include <ctype.h>
-
+#include <iostream>
+ 
 using namespace std;
 
 /**
