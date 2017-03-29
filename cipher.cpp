@@ -57,9 +57,6 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
-	unsigned char* c_key = new unsigned char[key.length() + 1];
-	strcpy((char *)c_key, key.c_str());
-
 	FILE *input, *output;
 
 	if ((input=fopen(argv[4], "rb")) == NULL)
@@ -85,12 +82,12 @@ int main(int argc, char** argv)
 	{
 		if (CipherName == "AES")
 		{
-			key = '0' + key;
+			key += '0';
 			blockSize = 16;
 		}
 
-		if (!cipher->setKey(c_key))
-            exit(1);
+		if (!cipher->setKey((const unsigned char*)key.c_str()))
+			exit(1);
 
         
 		unsigned char* data = new unsigned char[blockSize];
@@ -112,11 +109,11 @@ int main(int argc, char** argv)
         cout << "going to decrypt\n";
 		if (CipherName == "AES")
 		{
-			key = '1' + key;
+			key += '1';
 			blockSize = 16;
 		}
 
-		if(!cipher->setKey(c_key))
+		if(!cipher->setKey((const unsigned char*)key.c_str()))
 			exit(1);
 
 		unsigned char* data = new unsigned char[blockSize];
