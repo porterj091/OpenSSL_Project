@@ -1,12 +1,19 @@
-To compile, simply, type ''make'' at the terminal (without the quotes).
+# File Encryption/Decryption Utility
 
-Please do not forget to include a README file in your submission.
-It's worth 5 points.
+## Team Members
+Joseph Porter    (porterj091@csu.fullerton.edu)
+Luis Covarrubias (luiscovar@csu.fullerton.edu)
+Kevin Ochoa      (ochoakevinm@gmail.com) 
 
-Your README file should include:
+Programming language used: C++
 
-– Names and email addresses of all partners.
-– The programming language you use (e.g. C++ or Java)
-– How to execute your program.
-– Whether you implemented the extra credit.
-– Anything special about your submission that we should take note of.
+To execute this program run:
+'''./cipher <CIPHER NAME> <KEY> <ENC/DEC> <INPUT FILE> <OUTPUT FILE>'''
+
+Acceptable ciphers names are:
+        DES: Data Encryption Standard
+        AES: Advanced Encryption Standard
+
+No Extra Credit
+
+Anything Special: I wish
